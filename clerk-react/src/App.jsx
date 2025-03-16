@@ -11,12 +11,19 @@ import Dashboard from "./Dashboard";
 export default function App() {
   return (
     <>
-      <header>
+      <header style={{ padding: "10px", backgroundColor: "#f8f9fa" }}>
         <SignedOut>
           <SignInButton />
         </SignedOut>
         <SignedIn>
-          <UserButton />
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <div style={{ marginLeft: "10px", padding: "5px" }}>
+              <UserButton />
+            </div>
+            <span style={{ fontSize: "16px", fontWeight: "bold" }}>
+              Hello, Admin
+            </span>
+          </div>
         </SignedIn>
       </header>
 
