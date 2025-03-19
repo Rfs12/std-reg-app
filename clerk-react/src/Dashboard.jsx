@@ -12,7 +12,19 @@ const Dashboard = () => {
   const [editImage, setEditImage] = useState(null); // Track the new image in edit mode
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]); // Set the selected file
+    const file = e.target.files[0];
+    if (file) {
+      const validTypes = ["image/jpeg", "image/png"];
+      if (!validTypes.includes(file.type)) {
+        alert("Please upload a valid image file (jpg/png).");
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        alert("File size should not exceed 5MB.");
+        return;
+      }
+      setImage(file);
+    }
   };
 
   useEffect(() => {
@@ -55,12 +67,9 @@ const Dashboard = () => {
 
   const updateStatus = async (id, newStatus) => {
     try {
-      const res = await axios.put(
-        `http://localhost:5000/students/${id}/status`,
-        {
-          status: newStatus,
-        }
-      );
+      const res = await axios.put(`http://localhost:5000/students/${id}`, {
+        status: newStatus,
+      });
       setStudents(
         students.map((student) =>
           student._id === id ? { ...student, status: res.data.status } : student
@@ -126,7 +135,21 @@ const Dashboard = () => {
       [name]: value,
     });
   };
-
+  const handleEditImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const validTypes = ["image/jpeg", "image/png"];
+      if (!validTypes.includes(file.type)) {
+        alert("Please upload a valid image file (jpg/png).");
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        alert("File size should not exceed 5MB.");
+        return;
+      }
+      setEditImage(file);
+    }
+  };
   return (
     <div className="container mt-5">
       <h2 className="text-center mb-4">Student Dashboard</h2>
@@ -197,7 +220,7 @@ const Dashboard = () => {
                       <input
                         type="file"
                         className="form-control"
-                        onChange={(e) => setEditImage(e.target.files[0])}
+                        onChange={handleEditImageChange}
                       />
                     </div>
                     <div className="mb-3">

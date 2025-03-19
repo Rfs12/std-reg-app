@@ -14,7 +14,6 @@ const studentSchema = new mongoose.Schema(
     },
     image: {
       type: String, // Optional: Image URL as a string
-      required: false,
       required: true,
     },
     age: {

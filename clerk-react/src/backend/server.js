@@ -61,42 +61,6 @@ app.get("/students", async (req, res) => {
   }
 });
 
-// Create a new student
-app.post("/students", async (req, res) => {
-  try {
-    const { name, image, age, status } = req.body;
-    const newStudent = new Student({ name, image, age, status });
-    const savedStudent = await newStudent.save();
-    res.status(201).json(savedStudent);
-  } catch (error) {
-    res.status(500).json({ error: "Server error." });
-  }
-});
-
-// Update student status
-app.put("/students/:id/status", async (req, res) => {
-  const { id } = req.params;
-  const { status } = req.body;
-
-  if (!["Active", "Inactive"].includes(status)) {
-    return res.status(400).json({ error: "Invalid status value." });
-  }
-
-  try {
-    const updatedStudent = await Student.findByIdAndUpdate(
-      id,
-      { status },
-      { new: true }
-    );
-    if (!updatedStudent) {
-      return res.status(404).json({ error: "Student not found." });
-    }
-    res.json(updatedStudent);
-  } catch (error) {
-    res.status(500).json({ error: "Server error." });
-  }
-});
-
 // Delete student
 app.delete("/students/:id", async (req, res) => {
   const { id } = req.params;
@@ -110,22 +74,7 @@ app.delete("/students/:id", async (req, res) => {
     res.status(500).json({ error: "Server error." });
   }
 });
-app.put("/students/:id", upload.single("image"), async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { name, age, status } = req.body;
-    const image = req.file ? `/uploads/${req.file.filename}` : req.body.image;
-
-    const updatedStudent = await Student.findByIdAndUpdate(
-      id,
-      { name, age, status, image },
-      { new: true }
-    );
-    res.status(200).json(updatedStudent);
-  } catch (error) {
-    res.status(500).json({ message: "Error updating student", error });
-  }
-});
+//update student
 app.put("/students/:id", upload.single("image"), async (req, res) => {
   try {
     const { id } = req.params;
